@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
+import Login from "./pages/auth/Login";
+import Layout from "./pages/layout/Layout";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Settings from "./pages/settings/Settings";
+import AccountBook from "./pages/settings/accountBook/AccountBook";
+import AccountBookForm from "./pages/settings/accountBook/Form";
+import Member from "./pages/settings/member/Member";
+import MemberForm from "./pages/settings/member/Form";
+
+export default function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <BrowserRouter>
+      <Routes>
+        {/* halaman login tidak perlu proteksi */}
+        <Route path="/login" element={<Login />} />
+
+        {/* halaman lain diproteksi */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings">
+            <Route path="account-book" element={<AccountBook />} />
+            <Route path="account-book/add" element={<AccountBookForm />} />
+            {/* <Route path="account-book/edit/:id" element={<AccountBookForm />} /> */}
+            <Route path="member" element={<Member />} />
+            <Route path="member/add" element={<MemberForm />} />
+            {/* <Route path="member/edit/:id" element={<MemberForm />} /> */}
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

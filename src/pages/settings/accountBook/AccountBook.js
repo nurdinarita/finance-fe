@@ -16,7 +16,11 @@ const AccountBook = () => {
   const api = useAxios();
 
   // fetch data buku keuangan
-  const { data: accountBooks, isLoading } = useQuery({
+  const {
+    data: accountBooks,
+    isLoading,
+    isFetching: isAccountBookFetching,
+  } = useQuery({
     queryKey: ["account-books"],
     queryFn: () =>
       api.get(`/account-books`).then((res) => {
@@ -37,18 +41,18 @@ const AccountBook = () => {
 
       <div class="listview-title mt-2"></div>
       {/* Content */}
-      {isLoading && (
+      {(isLoading || isAccountBookFetching) && (
         <div className="text-center mt-5">
           <div className="spinner-border text-primary" role="status"></div>
         </div>
       )}
-      {!isLoading && accountBooks?.length === 0 && (
+      {!isLoading && accountBooks?.length === 0 && !isAccountBookFetching && (
         <div className="text-center mt-5">
           <IonIcon icon={walletOutline} style={{ fontSize: "80px" }} />
           <p className="mt-2">Belum ada buku keuangan</p>
         </div>
       )}
-      {!isLoading && accountBooks?.length > 0 && (
+      {!isLoading && accountBooks?.length > 0 && !isAccountBookFetching && (
         <ul class="listview image-listview inset">
           {accountBooks.map((book) => (
             <li>

@@ -11,6 +11,8 @@ import AccountBook from "./pages/settings/accountBook/AccountBook";
 import AccountBookForm from "./pages/settings/accountBook/Form";
 import Member from "./pages/settings/member/Member";
 import MemberForm from "./pages/settings/member/Form";
+import Category from "./pages/settings/category/Category";
+import CategoryForm from "./pages/settings/category/Form";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -56,6 +58,15 @@ export default function App() {
             <Route path="member" element={<Member />} />
             <Route path="member/add" element={<MemberForm />} />
             {/* <Route path="member/edit/:id" element={<MemberForm />} /> */}
+
+            <Route path="category" element={<Category />} />
+            <Route path="category/add" element={<CategoryForm />} />
+            {/* <Route path="category/edit/:id" element={<CategoryForm />} /> */}
+          </Route>
+          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<h1>404 Not Found</h1>} />
+          <Route path="/">
+            <Route path="*" element={<h1>404 Not Found</h1>} />
           </Route>
         </Route>
       </Routes>

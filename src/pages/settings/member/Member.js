@@ -11,7 +11,11 @@ const Member = () => {
 
   const selectedBook = JSON.parse(localStorage.getItem("selectedBook"));
   // fetch data Member
-  const { data: members, isLoading: isMemberLoading } = useQuery({
+  const {
+    data: members,
+    isLoading: isMemberLoading,
+    isFetching: isMemberFetching,
+  } = useQuery({
     queryKey: ["members"],
     queryFn: () =>
       api.get(`/members?account_book_id=${selectedBook.id}`).then((res) => {
@@ -30,22 +34,23 @@ const Member = () => {
         <div class="pageTitle">Member Page</div>
       </div>
       <div class="mt-2">
+        {(isMemberLoading || isMemberFetching) && (
+          <div className="text-center mt-5">
+            <div className="spinner-border text-primary" role="status"></div>
+          </div>
+        )}
+        {!isMemberLoading && members?.length === 0 && !isMemberFetching && (
+          <div className="text-center mt-5">
+            <IonIcon
+              icon={ionicons["personOutline"]}
+              style={{ fontSize: "80px" }}
+            />
+            <h3 className="mt-2">Belum ada member</h3>
+          </div>
+        )}
         <ul class="listview image-listview inset">
-          {isMemberLoading && (
-            <div className="text-center mt-5">
-              <div className="spinner-border text-primary" role="status"></div>
-            </div>
-          )}
-          {!isMemberLoading && members?.length === 0 && (
-            <div className="text-center mt-5">
-              <IonIcon
-                icon={ionicons["personOutline"]}
-                style={{ fontSize: "80px" }}
-              />
-              <h3 className="mt-2">Belum ada member</h3>
-            </div>
-          )}
           {!isMemberLoading &&
+            !isMemberFetching &&
             members?.map((member) => (
               <li>
                 <div class="item">

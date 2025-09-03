@@ -10,6 +10,7 @@ import { AuthContext } from "../../components/context/AuthContext";
 const Login = () => {
   const api = useAxios();
   const navigate = useNavigate();
+
   const { auth, dispatch, loading, error } = useContext(AuthContext);
 
   const {
@@ -22,13 +23,6 @@ const Login = () => {
 
   const email = watch("email");
   const password = watch("password");
-
-  // kalau sudah login (ada token), redirect ke /
-  useEffect(() => {
-    if (auth?.token) {
-      navigate("/", { replace: true });
-    }
-  }, [auth, navigate]);
 
   const onSubmit = async (data) => {
     dispatch({ type: "LOGIN_START" });

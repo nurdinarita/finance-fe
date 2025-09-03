@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
+import GuestRoute from "./components/protectedRoute/GuestRoute";
 import Login from "./pages/auth/Login";
 import Layout from "./pages/layout/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -29,7 +30,14 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         {/* halaman login tidak perlu proteksi */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          }
+        />
 
         {/* halaman lain diproteksi */}
         <Route

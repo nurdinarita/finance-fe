@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IonIcon } from "@ionic/react";
 import {
   cameraOutline,
@@ -7,9 +7,14 @@ import {
   notificationsOutline,
 } from "ionicons/icons";
 
+import useAxios from "../../components/hook/useAxios";
 import avatar1 from "../../assets/images/avatar1.jpg";
 
 const Settings = () => {
+  const api = useAxios();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
   // baca localStorage di awal (lazy init biar cuma sekali dieksekusi)
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
@@ -24,6 +29,16 @@ const Settings = () => {
     }
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
+
+  const handleLogout = () => {
+    setLoading(true);
+    api.post("/logout").finally(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/login", { replace: true });
+      setLoading(false);
+    });
+  };
 
   return (
     <>
@@ -149,8 +164,12 @@ const Settings = () => {
       </ul>
 
       <div class="text-center mt-3 mb-3">
-        <button class="btn btn-danger" onClick={() => localStorage.clear()}>
-          Keluar
+        <button
+          class="btn btn-danger"
+          onClick={handleLogout}
+          disabled={loading}
+        >
+          {loading ? "Logging out..." : "Logout"}
         </button>
       </div>
     </>

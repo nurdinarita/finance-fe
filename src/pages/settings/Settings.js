@@ -147,6 +147,12 @@ const Settings = () => {
           </Link>
         </li>
       </ul>
+
+      <div class="text-center mt-3 mb-3">
+        <button class="btn btn-danger" onClick={() => localStorage.clear()}>
+          Keluar
+        </button>
+      </div>
     </>
   );
 };
